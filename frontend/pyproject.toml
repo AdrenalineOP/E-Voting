@@ -1,0 +1,29 @@
+[project]
+name = "frontend"
+version = "0.1.0"
+description = "E-Voting Application"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "Sundaresan", email = "info@sundaresan.dev" }
+]
+dependencies = [
+    "flet>=0.28.3",
+]
+
+[tool.flet]
+org = "dev.sunderasn"
+product = "E-Voting"
+company = "sundaresan.dev"
+copyright = "Copyright (C) 2025 by Sundaresan V"
+
+[tool.flet.app]
+path = "src"
+
+[dependency-groups]
+dev = [
+    "flet[all]>=0.28.3"
+]
+
+[tool.poetry]
+package-mode = false
