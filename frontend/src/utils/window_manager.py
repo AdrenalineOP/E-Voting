@@ -17,12 +17,31 @@ def setup_window(page: ft.Page, storage: ClientStorage) -> None:
     is_maximized = storage.get(StorageKey.WINDOW_MAXIMIZED)
 
     # Configure window
-    page.window.prevent_close = storage.get(StorageKey.PREVENT_CLOSE_DIALOG)
-    page.window.maximized = storage.get(StorageKey.WINDOW_MAXIMIZED)
+    page.window.prevent_close = prevent_close
+    page.window.maximized = is_maximized
 
     # Register event handlers
-    page.on_close = lambda e: show_exit_dialog(page, storage)
-    page.on_resized = lambda e: handle_resize(page, storage)
+    page.window.on_event = lambda e: handle_window_event(page, storage, e)
+
+
+def handle_window_event(page: ft.Page, storage: ClientStorage, event: ft.EventType) -> None:
+    """Handle window events (close, resize, etc.).
+
+    Args:
+        page: Flet page instance
+        storage: ClientStorage instance
+        event: Window event
+    """
+    if event.data == "close":
+        # Check if we should show exit confirmation
+        prevent_close = storage.get(StorageKey.PREVENT_CLOSE_DIALOG)
+        if prevent_close:
+            show_exit_dialog(page, storage)
+        else:
+            page.window.destroy()
+    elif event.data == "resized":
+        # Handle resize/maximize events
+        handle_resize(page, storage)
 
 
 def handle_resize(page: ft.Page, storage: ClientStorage) -> None:

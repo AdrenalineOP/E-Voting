@@ -1,6 +1,7 @@
 """Client storage management with safe defaults."""
 import flet as ft
 from typing import Any
+
 from datetime import datetime
 from .storage_keys import StorageKey
 
@@ -65,6 +66,32 @@ class ClientStorage:
             default if default is not None else STORAGE_DEFAULTS.get(key)
         )
 
+    async def get_async(self, key: StorageKey, default: Any = None) -> Any:
+        """Async version of get for use in async contexts.
+
+        Args:
+            key: Storage key (use StorageKey enum)
+            default: Default value if key doesn't exist or is None
+
+        Returns:
+            Stored value or default
+        """
+        # Convert enum to string for storage access
+        key_str = str(key.value)
+
+        if not await self._storage.contains_key_async(key_str):
+            return default if default is not None else STORAGE_DEFAULTS.get(key)
+
+        value = await self._storage.get_async(key_str)
+
+        # Return empty string as None for application data fields
+        if value == "" and key in [StorageKey.ORGANIZATION_ID, StorageKey.SYSTEM_ID]:
+            return None
+
+        return value if value is not None else (
+            default if default is not None else STORAGE_DEFAULTS.get(key)
+        )
+
     def set(self, key: StorageKey, value: Any) -> None:
         """Set value in storage.
 
@@ -81,6 +108,22 @@ class ClientStorage:
 
         self._storage.set(key_str, value)
 
+    async def set_async(self, key: StorageKey, value: Any) -> None:
+        """Async version of set for use in async contexts.
+
+        Args:
+            key: Storage key (use StorageKey enum)
+            value: Value to store (cannot be None)
+        """
+        # Convert enum to string for storage access
+        key_str = str(key.value)
+
+        # Convert None to empty string for storage
+        if value is None:
+            value = ""
+
+        await self._storage.set_async(key_str, value)
+
     def contains(self, key: StorageKey) -> bool:
         """Check if key exists in storage.
 
@@ -93,6 +136,19 @@ class ClientStorage:
         # Convert enum to string for storage access
         key_str = str(key.value)
         return self._storage.contains_key(key_str)
+
+    async def contains_async(self, key: StorageKey) -> bool:
+        """Async version of contains for use in async contexts.
+
+        Args:
+            key: Storage key to check
+
+        Returns:
+            True if key exists, False otherwise
+        """
+        # Convert enum to string for storage access
+        key_str = str(key.value)
+        return await self._storage.contains_key_async(key_str)
 
     def remove(self, key: StorageKey) -> None:
         """Remove key from storage.
@@ -115,5 +171,15 @@ class ClientStorage:
             True if organization_id is not set
         """
         org_id = self.get(StorageKey.ORGANIZATION_ID)
+        # Empty string or None means not set
+        return not org_id or org_id == ""
+
+    async def is_first_launch_async(self) -> bool:
+        """Async version of is_first_launch for use in async contexts.
+
+        Returns:
+            True if organization_id is not set
+        """
+        org_id = await self.get_async(StorageKey.ORGANIZATION_ID)
         # Empty string or None means not set
         return not org_id or org_id == ""

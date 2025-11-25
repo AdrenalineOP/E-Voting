@@ -13,18 +13,13 @@ def show_exit_dialog(page: ft.Page, storage: ClientStorage) -> None:
     """
     checkbox = ft.Checkbox(
         label="Don't ask again",
+        label_style=ft.TextStyle(weight=ft.FontWeight.W_400),
         value=False,
     )
-
-    def handle_cancel(e):
-        """Close dialog without exiting."""
-        dialog.open = False
-        page.update()
 
     def handle_exit(e):
         """Exit application and save preference."""
         if checkbox.value:
-            # User doesn't want to see this dialog again
             storage.set(StorageKey.PREVENT_CLOSE_DIALOG, False)
         page.window.destroy()
 
@@ -33,25 +28,51 @@ def show_exit_dialog(page: ft.Page, storage: ClientStorage) -> None:
         title=ft.Row(
             [
                 ft.Icon(name=ft.Icons.QUESTION_MARK_ROUNDED),
-                ft.Text("Confirm Exit"),
+                ft.Text(
+                    value="Confirm Exit",
+                    weight=ft.FontWeight.W_500,
+                ),
             ],
             spacing=10,
         ),
         content=ft.Column(
             [
-                ft.Text("Are you sure you want to exit?"),
+                ft.Row([
+                    ft.Row(width=1),
+                    ft.Text(
+                        value="Are you sure you want to exit?",
+                        weight=ft.FontWeight.W_400,
+
+                    )
+                ]),
                 checkbox,
             ],
-            tight=True,
             spacing=10,
+            width=330,
+            height=60,
         ),
         actions=[
-            ft.TextButton("Cancel", on_click=handle_cancel),
-            ft.TextButton("Exit", on_click=handle_exit, autofocus=True),
+            ft.TextButton(
+                text="Cancel",
+                style=ft.ButtonStyle(
+                    text_style=ft.TextStyle(
+                        weight=ft.FontWeight.W_400
+                    )
+                ),
+                on_click=lambda e: page.close(dialog)
+            ),
+            ft.TextButton(
+                text="Exit",
+                style=ft.ButtonStyle(
+                    text_style=ft.TextStyle(
+                        weight=ft.FontWeight.W_400
+                    )
+                ),
+                on_click=handle_exit,
+                autofocus=True
+            ),
         ],
         actions_alignment=ft.MainAxisAlignment.END,
     )
 
-    page.dialog = dialog
-    dialog.open = True
-    page.update()
+    page.open(dialog)
