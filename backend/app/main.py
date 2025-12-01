@@ -1,26 +1,64 @@
 from fastapi import FastAPI
-from app.database import create_db_and_tables
-from app.api import api_routes  # assuming routes contains a router named api_router
-import uvicorn
+from datetime import datetime
+from app.api.route import api_router
+from app.core.config import settings
+from app.db.database import create_db_and_tables
 
-app = FastAPI(title="FastAPI Org System")
+app = FastAPI(
+    title=settings.APP_NAME,
+    description=settings.APP_DESCRIPTION,
+    version=settings.APP_VERSION,
+    debug=settings.DEBUG
+)
 
 
+# Create database tables on startup
 @app.on_event("startup")
-def startup_event():
+def on_startup():
     create_db_and_tables()
 
 
+# Root endpoint
+@app.get("/", tags=["Root"])
+async def root():
+    """
+    API information endpoint
+    """
+    return {
+        "app": settings.APP_NAME,
+        "message": f"{settings.APP_NAME} version {settings.APP_VERSION}",
+        "version": settings.APP_VERSION,
+        "type": "API Backend",
+        "environment": settings.ENVIRONMENT,
+        "status": "running",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+
 # Health check endpoint
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+@app.get("/health", tags=["Health"])
+async def health_check():
+    """
+    Health check for monitoring backend status
+    """
+    return {
+        "status": "healthy",
+        "service": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "environment": settings.ENVIRONMENT,
+        "timestamp": datetime.utcnow().isoformat()
+    }
 
 
-# Include API routes
-app.include_router(api_routes, prefix="/api")
+# Include API router
+app.include_router(api_router, prefix=settings.API_PREFIX)
 
-
-# Run the application directly
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    import uvicorn
+
+    uvicorn.run(
+        "app.main:app",
+        host=settings.API_HOST,
+        port=settings.API_PORT,
+        reload=settings.DEBUG
+    )

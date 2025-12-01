@@ -14,6 +14,8 @@ class StorageKey(str, Enum):
 
     # Application data
     ORGANIZATION_ID = "organization_id"
+    ORGANIZATION_CODE = "organization_code"
+    PRIMARY_EMAIL = "primary_email"
     SYSTEM_ID = "system_id"
     APP_VERSION = "app_version"
     CREATED_AT = "created_at"

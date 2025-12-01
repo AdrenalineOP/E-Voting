@@ -1,0 +1,130 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+.env/
+env.bak/
+venv.bak/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.production
+.env.staging
+*.key
+*.pem
+*.cert
+secrets.json
+config/secrets.yaml
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+*.sql
+db.sqlite3
+test_db.db
+instance/
+
+# Alembic
+alembic/versions/*.pyc
+
+# FastAPI specific
+*.pid
+.webassets-cache
+uploads/
+media/
+staticfiles/
+
+# IDE & Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+nosetests.xml
+test-results/
+
+# Logs
+*.log
+logs/
+*.log.*
+log/
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+
+# Redis dump
+dump.rdb
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# E-voting specific (sensitive data)
+voter_data/
+encrypted_votes/
+audit_logs/*.csv
+reports/sensitive/

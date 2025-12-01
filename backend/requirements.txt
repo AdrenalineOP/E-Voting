@@ -1,9 +1,24 @@
-fastapi
-uvicorn[standard]
-pydantic[email]
-sqlmodel
-python-jose[cryptography]
-passlib[bcrypt]
-python-multipart
-python-dotenv
-pydantic-settings
+# Core Framework
+fastapi~=0.115.0
+uvicorn[standard]~=0.30.0
+
+# Database (SQLite - no additional driver needed)
+sqlmodel~=0.0.14
+sqlalchemy~=2.0.26
+
+# Data Validation
+pydantic~=2.7.0
+pydantic-settings~=2.12.0
+pydantic[email]~=2.7.0
+
+# Password Hashing
+passlib[bcrypt]==1.7.4
+bcrypt==4.1.2
+
+# Environment Configuration
+python-dotenv~=1.2.1
+
+jinja2==3.1.2
+
+# Optional: For file uploads if needed
+python-multipart~=0.0.6

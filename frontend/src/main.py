@@ -1,6 +1,6 @@
 """E-Voting Application - Main Entry Point"""
 import flet as ft
-from core import ClientStorage, StorageKey
+from core import ClientStorage, StorageKey, API
 from ui.theme import configure_theme
 from utils.window_manager import setup_window
 from ui.page import StartMenuPage
@@ -15,7 +15,11 @@ def main(page: ft.Page) -> None:
     """
     # Initialize storage
     storage = ClientStorage(page)
+    storage.clear()
     storage.initialize()
+
+    # Initialize API client
+    api = API(storage)
 
     # Configure window
     version = storage.get(StorageKey.APP_VERSION)
@@ -29,10 +33,10 @@ def main(page: ft.Page) -> None:
     configure_theme(page)
 
     # Create and render main layout
-    _render_main_layout(page, storage)
+    _render_main_layout(page, storage, api)
 
 
-def _render_main_layout(page: ft.Page, storage: ClientStorage) -> None:
+def _render_main_layout(page: ft.Page, storage: ClientStorage, api: API) -> None:
     """Render main application layout.
 
     Args:
@@ -68,7 +72,7 @@ def _render_main_layout(page: ft.Page, storage: ClientStorage) -> None:
     page.add(bg_container)
 
     # Render start menu
-    start_menu = StartMenuPage(page, content_image, content_column, storage)
+    start_menu = StartMenuPage(page, content_image, content_column, storage, api)
     start_menu.render()
 
 

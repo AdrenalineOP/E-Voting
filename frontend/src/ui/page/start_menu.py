@@ -2,7 +2,7 @@
 import flet as ft
 from typing import Optional
 
-from core import ClientStorage
+from core import ClientStorage, API
 
 
 class StartMenuPage:
@@ -13,7 +13,14 @@ class StartMenuPage:
     COLLAPSED_IMAGE_HEIGHT = 170
     ANIMATION_DURATION = 600
 
-    def __init__(self, page: ft.Page, content_image: ft.Container, content_column: ft.Column, storage: ClientStorage):
+    def __init__(
+            self,
+            page: ft.Page,
+            content_image: ft.Container,
+            content_column: ft.Column,
+            storage: ClientStorage,
+            api: API
+    ):
         """Initialize start menu page.
 
         Args:
@@ -21,11 +28,13 @@ class StartMenuPage:
             content_image: Content image container
             content_column: Content column for menu items
             storage: Storage manager
+            api: API client instance
         """
         self.page = page
         self.content_image = content_image
         self.content_column = content_column
         self.storage = storage
+        self.api = api
         self.settings_button: Optional[ft.FloatingActionButton] = None
 
     async def render_async(self) -> None:
@@ -181,7 +190,8 @@ class StartMenuPage:
             self.page,
             self.content_image,
             self.content_column,
-            self.storage
+            self.storage,
+            self.api
         )
         account_page.render()
 

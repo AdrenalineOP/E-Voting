@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - E-Voting System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #e0e7ff;
+            font-size: 16px;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .greeting {
+            font-size: 18px;
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 16px;
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .otp-container {
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 30px 0;
+            border: 2px dashed #9ca3af;
+        }
+
+        .otp-label {
+            font-size: 14px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .otp-code {
+            font-size: 42px;
+            font-weight: 800;
+            color: #667eea;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .expiry-notice {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 6px;
+        }
+
+        .expiry-notice p {
+            font-size: 14px;
+            color: #92400e;
+            margin: 0;
+        }
+
+        .warning {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .warning p {
+            font-size: 14px;
+            color: #991b1b;
+            margin: 0;
+        }
+
+        .footer {
+            background: #f9fafb;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 13px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .security-icon {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: #667eea;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            line-height: 50px;
+            color: white;
+            font-size: 24px;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                border-radius: 0;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .otp-code {
+                font-size: 32px;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <!-- Header -->
+    <div class="header">
+        <div class="security-icon">🔐</div>
+        <h1>Email Verification</h1>
+        <p>Secure One-Time Password</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="greeting">
+            Hello {{ name }},
+        </div>
+
+        <div class="message">
+            We received a request to verify your email address for the <strong>{{ app_name }}</strong>.
+            Please use the One-Time Password (OTP) below to complete your verification.
+        </div>
+
+        <!-- OTP Box -->
+        <div class="otp-container">
+            <div class="otp-label">Your Verification Code</div>
+            <div class="otp-code">{{ otp }}</div>
+
+            <div class="expiry-notice">
+                <p>⏱️ <strong>This code will expire in {{ expiry_minutes }} minutes</strong></p>
+            </div>
+        </div>
+
+        <!-- Warning -->
+        <div class="warning">
+            <p>
+                <strong>⚠️ Security Notice:</strong> Never share this code with anyone.
+                Our team will never ask for your OTP. If you didn't request this code,
+                please ignore this email or contact our support team immediately.
+            </p>
+        </div>
+
+        <div class="message">
+            If you have any questions or need assistance, feel free to reach out to our support team.
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 {{ app_name }}. All rights reserved.</p>
+        <p>This is an automated message, please do not reply to this email.</p>
+
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Contact Support</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
