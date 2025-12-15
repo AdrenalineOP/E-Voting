@@ -25,7 +25,7 @@ class User(SQLModel, table=True):
     )
     org_id: uuid_pkg.UUID = Field(foreign_key="organizations.id", nullable=False, index=True)
 
-    username: str = Field(max_length=100, unique=True, nullable=False, index=True)
+    username: str = Field(max_length=100, unique=False, nullable=False, index=True)
     email: str = Field(max_length=255, unique=True, nullable=False, index=True)
     password_hash: str = Field(max_length=255, nullable=False)
 

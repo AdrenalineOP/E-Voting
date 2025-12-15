@@ -43,16 +43,6 @@ async def create_user(
             detail=f"Organization with id {user_data.org_id} not found"
         )
 
-    # Check if username already exists
-    existing_username = session.exec(
-        select(User).where(User.username == user_data.username)
-    ).first()
-    if existing_username:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Username {user_data.username} already exists"
-        )
-
     # Check if email already exists
     existing_email = session.exec(
         select(User).where(User.email == user_data.email)
@@ -60,7 +50,10 @@ async def create_user(
     if existing_email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Email {user_data.email} already exists"
+            detail={
+                "error": "email_already_exists",
+                "message": f"User with email {user_data.email} already exists"
+            }
         )
 
     # Create user with hashed password
